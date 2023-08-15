@@ -1,3 +1,4 @@
+#include <SDL.h>
 #include "Game.hpp"
 
 // our Game object
@@ -7,7 +8,7 @@ int main(int argc, char *argv[]) {
 
   g_game = new Game();
 
-  g_game->init("Chapter 1", 100, 100, 640, 480, 0);
+  g_game->init("Chapter 1", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
 
   while (g_game->running()) {
     g_game->handleEvents();
