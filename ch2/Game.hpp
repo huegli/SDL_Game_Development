@@ -13,7 +13,7 @@ public:
             int flags);
 
   void render();
-  void update() {}
+  void update();
   void handleEvents();
   void clean();
 

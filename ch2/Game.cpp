@@ -17,7 +17,7 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height,
       if (m_pRenderer != 0) // renderer init success
       {
         std::cout << "renderer creation successfull\n";
-        SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
       } else {
         std::cout << "renderer init fail\n";
         return false; // renderer init fail
@@ -31,26 +31,18 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height,
     return false; // SDL init fail
   }
 
-  SDL_Surface* pTempSurface = SDL_LoadBMP("assets/rider.bmp");
+  SDL_Surface *pTempSurface = SDL_LoadBMP("assets/animate.bmp");
   m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
   SDL_FreeSurface(pTempSurface);
- 
-  SDL_QueryTexture(m_pTexture, NULL, NULL, &m_sourceRectangle.w, &m_sourceRectangle.h);
 
-  m_sourceRectangle.w = 50;
-  m_sourceRectangle.h = 50;
-  
+  m_sourceRectangle.w = 128;
+  m_sourceRectangle.h = 82;
+
   m_destinationRectangle.x = m_sourceRectangle.x = 0;
   m_destinationRectangle.y = m_sourceRectangle.y = 0;
   m_destinationRectangle.w = m_sourceRectangle.w;
   m_destinationRectangle.h = m_sourceRectangle.h;
 
-  m_sourceRectangle.x = 50;
-  m_sourceRectangle.y = 50;
-  
-  m_destinationRectangle.x = 100;
-  m_destinationRectangle.y = 100;
-  
   std::cout << "init success\n";
   m_bRunning = true; // everything inited, start the main loop
 
@@ -60,10 +52,16 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height,
 void Game::render() {
   SDL_RenderClear(m_pRenderer); // clean the draw color
 
-  // SDL_RenderCopy(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destinationRectangle);
-  SDL_RenderCopy(m_pRenderer, m_pTexture, 0, 0);
+  // SDL_RenderCopy(m_pRenderer, m_pTexture, &m_sourceRectangle,
+  // &m_destinationRectangle);
+  SDL_RenderCopyEx(m_pRenderer, m_pTexture, &m_sourceRectangle,
+                   &m_destinationRectangle, 0, 0, SDL_FLIP_HORIZONTAL);
 
   SDL_RenderPresent(m_pRenderer); // draw
+}
+
+void Game::update() {
+  m_sourceRectangle.x = 128 * int(((SDL_GetTicks() / 100) % 6));
 }
 
 void Game::handleEvents() {
